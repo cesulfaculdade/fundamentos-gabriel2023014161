@@ -1,9 +1,59 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Alert, FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Product } from "./components/Product";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 export function Home() {
+  const products = [
+    "Arroz",
+    "Feijão",
+    "Macarrão",
+    "Farinha de Trigo",
+    "Açúcar",
+    "Sal",
+    "Óleo de Soja",
+    "Leite",
+    "Ovos",
+    "Pão",
+    "Café",
+    "Chá",
+    "Manteiga",
+    "Queijo",
+    "Presunto",
+    "Frango",
+    "Carne Bovina",
+    "Peixe",
+    "Frutas",
+    "Legumes",
+    "Verduras",
+    "Batata",
+    "Cebola",
+    "Alho",
+    "Tomate",
+    "Cenoura",
+    "Banana",
+    "Maçã",
+    "Laranja",
+    "Uva",
+    "Refrigerante",
+    "Suco",
+    "Água Mineral",
+    "Biscoitos",
+    "Cereais",
+    "Molho de Tomate",
+    "Condimentos",
+    "Iogurte",
+    "Sorvete",
+    "Chocolate"
+  ];
 
     function handleProductAdd() {
-        console.log('Alisson Koerich')
+      if (products.includes('Arroz')){
+        Alert.alert("Produto já cadastrado", "Já existe um produto na lista com esse nome.")
+      }
+    }
+
+    function handleProdutRemove(name: string) {
+        console.log(`Produto Removido! ${name}`);
     }
 
     return (
@@ -29,10 +79,21 @@ export function Home() {
                 </TouchableOpacity>
             </View>
               <Text style={styles.listTitle}>Compras Pendentes</Text>
-            <View style={styles.list}>
-              <Text style={styles.listEmptyText}>
-                Comprou todos os produtos? Adicione produtos a sua lista de compras</Text>
-            </View>
+            
+            <FlatList 
+              data={products}
+              keyExtractor={item => item}
+              renderItem={({item}) => (
+                <Product name={item} onRemove={() => handleProdutRemove(item)} />
+              )}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={products.length <= 0 && styles.list}
+              ListEmptyComponent={() => (
+                <Text style={styles.listEmptyText}>
+                  Comprou todos os produtos? Adicione produtos a sua lista de compras
+                </Text>
+              )}
+            />
         </View>
     )
 }
@@ -83,7 +144,8 @@ const styles = StyleSheet.create({
     },
     listTitle: {
       fontWeight: 'bold',
-      fontSize: 20
+      fontSize: 20,
+      marginBottom: 16
     },
     listEmptyText: {
       fontSize: 16,
