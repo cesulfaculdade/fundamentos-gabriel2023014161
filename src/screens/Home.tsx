@@ -1,65 +1,39 @@
 import { Alert, FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { Product } from "./components/Product";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import { useState } from "react";
 
 export function Home() {
-  const products = [
-    "Arroz",
-    "Feijão",
-    "Macarrão",
-    "Farinha de Trigo",
-    "Açúcar",
-    "Sal",
-    "Óleo de Soja",
-    "Leite",
-    "Ovos",
-    "Pão",
-    "Café",
-    "Chá",
-    "Manteiga",
-    "Queijo",
-    "Presunto",
-    "Frango",
-    "Carne Bovina",
-    "Peixe",
-    "Frutas",
-    "Legumes",
-    "Verduras",
-    "Batata",
-    "Cebola",
-    "Alho",
-    "Tomate",
-    "Cenoura",
-    "Banana",
-    "Maçã",
-    "Laranja",
-    "Uva",
-    "Refrigerante",
-    "Suco",
-    "Água Mineral",
-    "Biscoitos",
-    "Cereais",
-    "Molho de Tomate",
-    "Condimentos",
-    "Iogurte",
-    "Sorvete",
-    "Chocolate"
-  ];
+    const [products, setProducts] = useState<string[]>([]);
+    const [productName, setProductName] = useState('');
 
     function handleProductAdd() {
-      if (products.includes('Arroz')){
-        Alert.alert("Produto já cadastrado", "Já existe um produto na lista com esse nome.")
+      if (products.includes(productName)){
+        return Alert.alert("Produto já cadastrado", "Já existe um produto na lista com esse nome.")
       }
+
+      setProducts((prevState) => [...prevState, productName]);
+      setProductName('');
     }
 
     function handleProdutRemove(name: string) {
-        console.log(`Produto Removido! ${name}`);
-    }
+      console.log(`Produto Removido! ${name}`);
+      return Alert.alert("Remover", `Deseja remover o produto ${name}?`, [
+          {
+           text: 'Sim',
+           onPress: () => setProducts(prevState => prevState.filter(product => product != name))
+          },
+          {
+            text: 'Não',
+            style: 'cancel'
+          }
+        ]);
+       }
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Lista de Compras</Text>
-            <Text style={styles.todaysDate}>Segunda-Feira, 05 de Agosto de 2024</Text>
+            <Text style={styles.todaysDate}>Segunda-Feira, 19 de Agosto de 2024</Text>
 
             <View style={styles.form}>
                 <TextInput 
@@ -67,6 +41,8 @@ export function Home() {
                  placeholder="Nome do Produto"
                  placeholderTextColor='#BDBABA'
                  keyboardType="default"
+                 onChangeText={setProductName}
+                 value={productName}
                 />
 
                 <TouchableOpacity style={styles.button} 
